@@ -39,12 +39,32 @@ function selectRandomQuestions() {
         
         pointValues.forEach(points => {
             // Get all questions with this point value
-            const questionsWithPoints = categoryQuestions.filter(q => q.points === points);
+            let questionsWithPoints = categoryQuestions.filter(q => q.points === points);
+            
+            // If no questions exist for this point value, try to use questions from nearby point values
+            if (questionsWithPoints.length === 0) {
+                // Try adjacent point values
+                const alternativePoints = [points - 100, points + 100, points - 200, points + 200];
+                for (let altPoints of alternativePoints) {
+                    questionsWithPoints = categoryQuestions.filter(q => q.points === altPoints);
+                    if (questionsWithPoints.length > 0) break;
+                }
+            }
+            
+            // If still no questions, use any available question from this category
+            if (questionsWithPoints.length === 0) {
+                questionsWithPoints = categoryQuestions;
+            }
             
             if (questionsWithPoints.length > 0) {
                 // Select a random question
                 const randomIndex = Math.floor(Math.random() * questionsWithPoints.length);
-                gameState.selectedQuestions[category][points] = questionsWithPoints[randomIndex];
+                const selectedQuestion = questionsWithPoints[randomIndex];
+                // Store with the board's point value, not the question's original point value
+                gameState.selectedQuestions[category][points] = {
+                    ...selectedQuestion,
+                    points: points // Override to use the tile's point value
+                };
             }
         });
     });
@@ -70,7 +90,9 @@ function createBoard() {
         categories.forEach(category => {
             const tile = document.createElement('div');
             tile.className = 'question-tile';
-            tile.textContent = `$${points}`;
+            tile.textContent = `
+$$
+{points}`;
             tile.dataset.category = category;
             tile.dataset.points = points;
             
@@ -96,12 +118,15 @@ function showQuestion(category, points) {
     const question = gameState.selectedQuestions[category][points];
     
     if (!question) {
+        console.error(`No question found for ${category} - ${points}`);
         return;
     }
     
     // Update question display
     document.getElementById('question-category').textContent = category;
-    document.getElementById('question-points').textContent = `$${points}`;
+    document.getElementById('question-points').textContent = `
+$$
+{points}`;
     document.getElementById('question-text').textContent = question.question;
     
     // Create answer buttons
