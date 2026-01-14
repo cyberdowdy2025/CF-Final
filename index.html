@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Fundamentals Jeopardy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Computer Fundamentals Jeopardy</h1>
+            <div class="score-display">
+                <span>Score: <span id="score">0</span></span>
+                <span>Questions: <span id="question-count">0</span>/25</span>
+            </div>
+        </header>
+
+        <div id="start-screen" class="screen active">
+            <h2>Welcome to Computer Fundamentals Jeopardy!</h2>
+            <p>Test your knowledge across 5 categories:</p>
+            <ul>
+                <li>Computer Parts</li>
+                <li>Data Privacy</li>
+                <li>Phishing & Security</li>
+                <li>Data Integrity</li>
+                <li>General Computing</li>
+            </ul>
+            <p>Select questions worth 100-500 points. Higher points = harder questions!</p>
+            <button onclick="startGame()" class="start-btn">Start Game</button>
+        </div>
+
+        <div id="game-board" class="screen">
+            <div class="board-grid" id="board-grid"></div>
+        </div>
+
+        <div id="question-screen" class="screen">
+            <div class="question-card">
+                <div class="category-display" id="question-category"></div>
+                <div class="points-display" id="question-points"></div>
+                <div class="question-text" id="question-text"></div>
+                <div class="answers-grid" id="answers-grid"></div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+
+        <div id="end-screen" class="screen">
+            <h2>Game Over!</h2>
+            <div class="final-score">
+                <p>Your Final Score: <span id="final-score">0</span></p>
+                <p>Questions Answered: <span id="final-count">0</span>/25</p>
+            </div>
+            <div class="rank-display" id="rank-display"></div>
+            <div class="rank-message" id="rank-message"></div>
+            <button onclick="location.reload()" class="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
